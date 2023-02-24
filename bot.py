@@ -117,8 +117,7 @@ def main():
                     bot.send_message(msg.chat.id,
                                      f'Input some WORDS, not numbers')
                     break
-                else:
-                    bot.send_message(msg.chat.id, f'{len(res)} words')
+            bot.send_message(msg.chat.id, f'{len(res)} words')
         else:
             bot.send_message(msg.chat.id, 'Input some words after command')
 
@@ -156,22 +155,26 @@ def main():
         _, my_list = read_cities(msg.chat.id)
         bot.send_message(msg.chat.id, ', '.join(my_list))
 
+    @bot.message_handler(commands=['start'])
+    def info_message(msg):
+        bot.send_message(msg.chat.id,
+                         f'Available commands are: '
+                         f'\n/wordcount /wc counting words put '
+                         f'after the command'
+                         f'\n/next_full_moon /next_moon /moon'
+                         f' - put a date dd-mm-yyyy after the comand to'
+                         f' see the next full moon date'
+                         f'\n/cities /города - the cities game'
+                         f'\n/named_cities - the list of cities which have'
+                         f' been already named'
+                         f'\n/cities_stop /города_стоп - stop playing')
+
     @bot.message_handler(content_types=['text'])
     def main_reply(msg):
         if os.path.isfile(f'./users/{msg.chat.id}'):
             game_of_cities(msg)
         else:
-            bot.send_message(msg.chat.id,
-                             f'Available commands are: '
-                             f'\n/wordcount /wc counting words put '
-                             f'after the command'
-                             f'\n/next_full_moon /next_moon /moon'
-                             f' - put a date dd-mm-yyyy after the comand to'
-                             f' see the next full moon date'
-                             f'\n/cities /города - the cities game'
-                             f'\n/named_cities - the list of cities which have'
-                             f' been already named'
-                             f'\n/cities_stop /города_стоп - stop playing')
+            info_message(msg)
     try:
         bot.infinity_polling(allowed_updates=['chat_member',
                                               'my_chat_member',
