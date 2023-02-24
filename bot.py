@@ -69,7 +69,7 @@ def main():
             save_already_named(user_id, bot_city)
             return bot_city
         else:
-            if city.capitalize() in all_cities and city not in user_named:
+            if city.title() in all_cities and city not in user_named:
                 result_set = set(all_cities)
                 result_set.symmetric_difference_update(set(user_named))
                 result_set.symmetric_difference_update(([city]))
@@ -85,7 +85,7 @@ def main():
     def save_already_named(user_id, bot_city):  # saving city that is already used for this user
         try:
             with open(f'./users/{user_id}', 'a', newline='', encoding='utf-8') as f:
-                f.writelines(f'{bot_city}\r\n')
+                f.writelines(f'{bot_city.title()}\r\n')
         except (FileNotFoundError, IOError) as e:
             print(e)
             bot.send_message(user_id, 'Critical error. '
@@ -101,7 +101,7 @@ def main():
         try:
             bot.delete_state(msg.chat.id)
             os.remove(f'./users/{msg.chat.id}')
-            bot.send_message(msg.chat.id, 'If you stop the game - I won)')
+            bot.send_message(msg.chat.id, 'The game is ended)')
         except (FileNotFoundError, FileExistsError, OSError) as e:
             print(e)
             bot.send_message(msg.chat.id, 'Something goes wrong, try later'
